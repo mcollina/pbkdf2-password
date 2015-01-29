@@ -6,7 +6,7 @@ Easy salt/password creation for Node.js, extracted from
 Usage
 -----
 
-```
+```js
 var bkfd2Password = require("pbkdf2-password");
 var hasher = bkfd2Password();
 var assert = require("assert");
