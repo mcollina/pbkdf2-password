@@ -1,4 +1,4 @@
-var hasher = require("./");
+var hasher = require("./")();
 var expect = require("chai").expect;
 
 describe("hasher", function() {
