@@ -25,7 +25,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 "use strict";
 
 var crypto = require("crypto");
-var async = require("async");
+var fastfall = require("fastfall");
 
 /**
  * Creates a new password hasher
@@ -41,6 +41,17 @@ module.exports = function build(options) {
   var saltLength = options.saltLength || 64;
   var iterations = options.iterations || 10000;
   var keyLength = options.keyLength || 128;
+
+  var passNeeded = fastfall([
+    genPass,
+    genSalt,
+    genHash
+  ])
+
+  var saltNeeded = fastfall([
+    genSalt,
+    genHash
+  ])
 
   /**
    * Hash a password, using a hash and the pbkd2
@@ -65,31 +76,15 @@ module.exports = function build(options) {
    * @param {Object} opts The options (optional)
    * @param {Function} callback
    */
-  function hasher() {
-
-    var args = Array.prototype.slice.call(arguments, 0);
-    var callback = args.pop();
-    var opts = args.pop() || {};
-
-    var queue = [];
-
+  function hasher(opts, callback) {
     if (typeof opts.password !== 'string') {
-      queue.push(genPass);
-    }
-
-    if (typeof opts.salt !== 'string') {
-      queue.push(genSalt);
+      passNeeded(opts, callback);
+    } else if (typeof opts.salt !== 'string') {
+      saltNeeded(opts, callback);
     } else {
       opts.salt = new Buffer(opts.salt, 'base64');
+      genHash(opts, callback);
     }
-
-    queue.push(genHash);
-
-    queue = queue.map(function(f) {
-      return async.apply(f, opts);
-    });
-
-    async.waterfall(queue, callback);
   };
 
   /**
@@ -105,7 +100,7 @@ module.exports = function build(options) {
       if (buffer) {
         opts.password = buffer.toString("base64");
       }
-      cb(err);
+      cb(err, opts);
     });
   }
 
@@ -119,7 +114,7 @@ module.exports = function build(options) {
   function genSalt(opts, cb) {
     crypto.randomBytes(saltLength, function(err, buf) {
       opts.salt = buf;
-      cb(err);
+      cb(err, opts);
     });
   }
 
