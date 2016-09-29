@@ -27,6 +27,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 var crypto = require("crypto");
 var fastfall = require("fastfall");
 
+// we can support a digest if we are not in node v0.10
+var supportsDigest = process.version.indexOf('v0.10') !== 0
+
 /**
  * Creates a new password hasher
  *
@@ -43,6 +46,11 @@ module.exports = function build(options) {
   var iterations = options.iterations || 10000;
   var keyLength = options.keyLength || 128;
   var digest = options.digest || 'sha1'
+  var genHash = supportsDigest ? genHashWithDigest : genHashWithoutDigest
+
+  if (digest !== 'sha1' && !supportsDigest) {
+    throw new Error('v0.10 does not support setting a digest')
+  }
 
   var passNeeded = fastfall([
     genPass,
@@ -133,8 +141,31 @@ module.exports = function build(options) {
    * @param {Object} opts The options used to generate the hash (password & salt)
    * @param {Function} cb The callback
    */
-  function genHash(opts, cb) {
+  function genHashWithDigest(opts, cb) {
     crypto.pbkdf2(opts.password, opts.salt, iterations, keyLength, digest, function(err, hash) {
+      if (typeof hash === 'string') {
+        hash = new Buffer(hash, 'binary');
+      }
+
+      cb(err, opts.password, opts.salt.toString("base64"), hash.toString("base64"));
+    });
+  }
+
+  /**
+   * Generates a new hash using the password and the salt
+   *
+   *  The callback will be called with the following arguments:
+   *   - the error, if something when wrong.
+   *   - the password.
+   *   - the salt, encoded in base64.
+   *   - the hash, encoded in base64.
+   *
+   * @api private
+   * @param {Object} opts The options used to generate the hash (password & salt)
+   * @param {Function} cb The callback
+   */
+  function genHashWithoutDigest(opts, cb) {
+    crypto.pbkdf2(opts.password, opts.salt, iterations, keyLength, function(err, hash) {
       if (typeof hash === 'string') {
         hash = new Buffer(hash, 'binary');
       }
