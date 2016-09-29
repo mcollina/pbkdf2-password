@@ -1,4 +1,4 @@
-# pbkdf2-password
+# pbkdf2-password&nbbsp;[![Build Status](https://travis-ci.org/mcollina/pbkdf2-password.svg?branch=master)](https://travis-ci.org/mcollina/pbkdf2-password)
 
 Easy salt/password creation for Node.js, extracted from
 [Mosca](http://npm.im/mosca).
@@ -45,6 +45,7 @@ Options:
  * `saltLength`, the length of the random salt
  * `iterations`, number of pbkdf2 iterations
  * `keyLength`, the length of the generated keys
+ * `digest`, the digest algorithm, default `'sha1'`
 
 <a name="hasher">
 ### hasher(opts, function(err, pass, salt, hash))

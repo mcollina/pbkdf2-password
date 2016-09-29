@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2013-2015 Matteo Collina, http://matteocollina.com
+Copyright (c) 2013-2016 Matteo Collina, http://matteocollina.com
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
@@ -34,6 +34,7 @@ var fastfall = require("fastfall");
  *  - `saltLength`, the length of the random salt
  *  - `iterations`, number of pbkdf2 iterations
  *  - `keyLength`, the length of the generated keys
+ *  - `digest`, the digest algorithm, default 'sha1'
  */
 module.exports = function build(options) {
   options = options || {};
@@ -41,6 +42,7 @@ module.exports = function build(options) {
   var saltLength = options.saltLength || 64;
   var iterations = options.iterations || 10000;
   var keyLength = options.keyLength || 128;
+  var digest = options.digest || 'sha1'
 
   var passNeeded = fastfall([
     genPass,
@@ -132,7 +134,7 @@ module.exports = function build(options) {
    * @param {Function} cb The callback
    */
   function genHash(opts, cb) {
-    crypto.pbkdf2(opts.password, opts.salt, iterations, keyLength, function(err, hash) {
+    crypto.pbkdf2(opts.password, opts.salt, iterations, keyLength, digest, function(err, hash) {
       if (typeof hash === 'string') {
         hash = new Buffer(hash, 'binary');
       }
