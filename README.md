@@ -1,4 +1,4 @@
-# pbkdf2-password&nbbsp;[![Build Status](https://travis-ci.org/mcollina/pbkdf2-password.svg?branch=master)](https://travis-ci.org/mcollina/pbkdf2-password)
+# pbkdf2-password&nbsp;[![Build Status](https://travis-ci.org/mcollina/pbkdf2-password.svg?branch=master)](https://travis-ci.org/mcollina/pbkdf2-password)
 
 Easy salt/password creation for Node.js, extracted from
 [Mosca](http://npm.im/mosca).
