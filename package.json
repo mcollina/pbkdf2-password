@@ -1,6 +1,6 @@
 {
   "name": "pbkdf2-password",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Easy salt/password creation for Node.js, extracted from Mosca",
   "main": "pbkdf2-password.js",
   "scripts": {
