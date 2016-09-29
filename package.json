@@ -21,8 +21,8 @@
   },
   "homepage": "https://github.com/mcollina/pbkdf2-password",
   "devDependencies": {
-    "chai": "^1.10.0",
-    "mocha": "^2.1.0"
+    "chai": "^3.5.0",
+    "mocha": "^3.1.0"
   },
   "dependencies": {
     "fastfall": "^1.2.3"
