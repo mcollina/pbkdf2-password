@@ -3,6 +3,23 @@
 Easy salt/password creation for Node.js, extracted from
 [Mosca](http://npm.im/mosca).
 
+Installation
+------------
+
+You can install `pbkdf2-password` via npm or yarn.
+
+### Using npm
+
+```bash
+npm install pbkdf2-password
+```
+
+### Using Yarn
+
+```bash
+yarn add pbkdf2-password
+```
+
 Usage
 -----
 
